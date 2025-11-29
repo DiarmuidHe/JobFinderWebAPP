@@ -1,0 +1,120 @@
+<section class="job-search">
+
+  <!-- FILTERS -->
+  <mat-card class="filters-card">
+    <div class="filters-header">
+      <h2>Job Search</h2>
+
+      <button mat-stroked-button color="primary" (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+
+    <div class="filters-grid">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          placeholder="Job title or company"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Location</mat-label>
+        <mat-select [(ngModel)]="selectedLocation" (selectionChange)="onLocationChange()">
+          <mat-option value="">All</mat-option>
+          @for (loc of locations; track loc) {
+            <mat-option [value]="loc">{{ loc }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Job Type</mat-label>
+        <mat-select [(ngModel)]="selectedJobType" (selectionChange)="onJobTypeChange()">
+          <mat-option value="">All</mat-option>
+          @for (jt of jobTypes; track jt) {
+            <mat-option [value]="jt">{{ jt }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange()">
+          <mat-option value="">All</mat-option>
+          @for (cat of categories; track cat) {
+            <mat-option [value]="cat">{{ cat }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+
+  <!-- JOB RESULTS - CARD LIST -->
+  <mat-card class="results-card">
+    <div class="results-header">
+      <h3>Results</h3>
+
+      @if (jobs.length > 0) {
+        <span class="results-count">
+          {{ jobs.length }} job{{ jobs.length === 1 ? '' : 's' }} found
+        </span>
+      }
+    </div>
+
+    @if (jobs.length > 0) {
+
+      <div class="job-list">
+        @for (job of jobs; track job.jobId) {
+          <mat-card class="job-card">
+
+            <div class="job-card-header">
+              <div>
+                <h2 class="job-title">{{ job.title }}</h2>
+                <div class="company">{{ job.companyName }}</div>
+              </div>
+
+              <div class="badges">
+                <span class="pill">{{ job.jobType }}</span>
+                <span class="pill">{{ job.location }}</span>
+              </div>
+            </div>
+
+            <div class="job-card-body">
+              <div class="salary">
+                <strong>Salary:</strong> {{ getSalaryRange(job) }}
+              </div>
+
+              <div class="posted">
+                <strong>Posted:</strong> {{ job.postedAt | date: 'mediumDate' }}
+              </div>
+            </div>
+
+            <div class="job-card-actions">
+              <a
+                mat-flat-button
+                color="primary"
+                [routerLink]="['/jobs', job.employerId, job.jobId]">
+                View Details
+              </a>
+            </div>
+
+          </mat-card>
+        }
+      </div>
+
+    } @else {
+      <div class="no-jobs">
+        <p>No jobs found.</p>
+        <button mat-stroked-button color="primary" (click)="clearFilters()">
+          Reset Filters
+        </button>
+      </div>
+    }
+
+  </mat-card>
+
+</section>
