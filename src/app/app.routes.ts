@@ -6,7 +6,7 @@ import { EmployerFormComponent } from './employer-form-component/employer-form-c
 
 import { JobseekerListComponent } from './jobseeker-list-component/jobseeker-list-component';
 // import { JobSeekerFormComponent } from './jobseeker-form-component/jobseeker-form-component';
-// import { JobSeekerDetailComponent } from './jobseeker-detail-component/jobseeker-detail-component';
+import { JobseekerDetailComponent } from './jobseeker-detail-component/jobseeker-detail-component';
 export const routes: Routes = [
     {path: '', redirectTo: '/employers', pathMatch: 'full' },
     { path: 'employers', component: EmployerList },
@@ -15,7 +15,7 @@ export const routes: Routes = [
     
     { path: 'jobseekers', component: JobseekerListComponent },
     // { path: 'jobseekers/new', component: JobSeekerFormComponent },
-    // { path: 'jobseekers/:id', component: JobSeekerDetailComponent },
+    { path: 'jobs/:employerId/:jobId', component: JobseekerDetailComponent },
     { path: '**', redirectTo: '/employers' }
 ];
 @NgModule({

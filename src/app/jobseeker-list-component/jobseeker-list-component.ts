@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { EmployerService } from '../employers/employer.service';
 import { Employer } from '../employers/employer.interface';
 import { Job } from '../jobs/job.interface';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,7 +20,6 @@ interface JobWithEmployer extends Job {
 @Component({
   selector: 'app-jobseeker-list-component',
   imports: [    
-    AsyncPipe,
     DatePipe,
     FormsModule, 
     MatTableModule,
