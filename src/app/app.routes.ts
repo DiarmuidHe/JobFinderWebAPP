@@ -1,6 +1,17 @@
-import { Routes } from '@angular/router';
-import { EmployerList } from './employer-list/employer-list';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { EmployerList } from './employer-list-component/employer-list';
+import { EmployerDetailComponent } from './employer-detail-component/employer-detail-component';
+import { EmployerFormComponent } from './employer-form-component/employer-form-component';
 export const routes: Routes = [
     {path: '', redirectTo: '/employers', pathMatch: 'full' },
     { path: 'employers', component: EmployerList },
+    { path: 'employers/new', component: EmployerFormComponent },
+    { path: 'employers/:id', component: EmployerDetailComponent },
+    { path: '**', redirectTo: '/employers' }
 ];
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

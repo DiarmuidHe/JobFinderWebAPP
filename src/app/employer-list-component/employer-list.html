@@ -16,13 +16,15 @@
   <mat-card>
     <mat-card-content>
 
-      <div *ngIf="isLoading">
+      @if (isLoading) {
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div>
+      }
 
-      <div *ngIf="errorMessage" class="error">
-        {{ errorMessage }}
-      </div>
+      @if (errorMessage) {
+        <div class="error">
+          {{ errorMessage }}
+        </div>
+      }
 
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
 
@@ -69,6 +71,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
       </table>
+
     </mat-card-content>
   </mat-card>
 </div>
