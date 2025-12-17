@@ -18,14 +18,14 @@ import { MatButtonModule } from '@angular/material/button';
 export class App {
   protected readonly title = signal('Job Search App');
     ngOnInit(): void {
-    // DEV ONLY: pre-login as James
-    localStorage.setItem(
-      'currentJobSeeker',
-      JSON.stringify({
-        _id: '68f3cdb3fb94b479f9616724',
-        name: 'James Murphy',
-        email: 'James.murphy@example.com'
-      })
-    );
+    // // DEV ONLY: pre-login as James
+    // localStorage.setItem(
+    //   'currentJobSeeker',
+    //   JSON.stringify({
+    //     _id: '68f3cdb3fb94b479f9616724',
+    //     name: 'James Murphy',
+    //     email: 'James.murphy@example.com'
+    //   })
+    // );
   }
 }

@@ -11,7 +11,7 @@ type LoginResponse = { accessToken: string };
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authUrl = `${environment.apiUri}/auth`;
+  private authUrl = `${environment.apiUri}/auth/register`;
 
   constructor(private http: HttpClient) {}
 

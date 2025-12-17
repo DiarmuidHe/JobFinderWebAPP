@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmployerList } from './employer-list-component/employer-list';
 import { EmployerDetailComponent } from './employer-detail-component/employer-detail-component';
 import { EmployerFormComponent } from './employer-form-component/employer-form-component';
-
+import { LoginComponent } from './login-component/login-component';
 import { JobseekerListComponent } from './jobseeker-list-component/jobseeker-list-component';
 
 import { JobseekerDetailComponent } from './jobseeker-detail-component/jobseeker-detail-component';
@@ -16,5 +16,7 @@ export const routes: Routes = [
     
     { path: 'jobseekers', component: JobseekerListComponent },
     { path: 'jobseekers/:employerId/:jobId', component: JobseekerDetailComponent },
+    { path: 'login', component: LoginComponent },
+
 ];
 
