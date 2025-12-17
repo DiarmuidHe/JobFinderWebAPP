@@ -1,48 +1,61 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 import { JobSeeker } from '../jobseekers/jobseeker.interface';
 
-const STORAGE_KEY = 'currentJobSeeker';
+const STORAGE_KEY_USER = 'currentJobSeeker';
+const STORAGE_KEY_TOKEN = 'accessToken';
 
-@Injectable({
-  providedIn: 'root'
-})
+type LoginResponse = { accessToken: string };
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  
-  /** Save the logged-in jobseeker in localStorage */
+  private authUrl = `${environment.apiUri}/auth`;
+
+  constructor(private http: HttpClient) {}
+
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.authUrl, { email, password }).pipe(
+      tap((resp) => {
+        localStorage.setItem(STORAGE_KEY_TOKEN, resp.accessToken);
+      })
+    );
+  }
+
   setCurrentJobSeeker(jobSeeker: JobSeeker): void {
-    
-    //future implementation
     const data = {
       _id: jobSeeker._id,
       name: jobSeeker.name,
       email: jobSeeker.email
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
+    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(data));
   }
 
-  /** Read the logged-in jobseeker from localStorage */
-  getCurrentJobSeeker(): { _id: string; name: string; email: string } | null {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return null;
-    }
+  getCurrentJobSeeker(): JobSeeker | null {
+    const raw = localStorage.getItem(STORAGE_KEY_USER);
+    if (!raw) return null;
     try {
-      return JSON.parse(raw);
+      return JSON.parse(raw) as JobSeeker;
     } catch {
       return null;
     }
   }
 
-  /** Convenience: just the ID */
   getCurrentJobSeekerId(): string | null {
-    const js = this.getCurrentJobSeeker();
-    return js?._id ?? null;
+    return this.getCurrentJobSeeker()?._id ?? null;
   }
 
-  /** Logout */
-  clear(): void {
-    localStorage.removeItem(STORAGE_KEY);
+  getToken(): string | null {
+    return localStorage.getItem(STORAGE_KEY_TOKEN);
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  logout(): void {
+    localStorage.removeItem(STORAGE_KEY_TOKEN);
+    localStorage.removeItem(STORAGE_KEY_USER);
   }
 }
