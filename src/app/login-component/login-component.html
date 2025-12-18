@@ -1,13 +1,65 @@
-   <h2>Login</h2>
+<div class="login-page">
+  <mat-card class="login-card">
+    <h2 class="login-title">Login</h2>
 
-    <form (ngSubmit)="submit()">
-      <label>Email</label>
-      <input [(ngModel)]="email" name="email" required />
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" autocomplete="email" />
 
-      <label>Password</label>
-      <input [(ngModel)]="password" name="password" type="password" required />
+        @if (email?.hasError('required') && email?.touched) {
+          <mat-error>Email is required</mat-error>
+        } @else if (email?.hasError('email') && email?.touched) {
+          <mat-error>Please enter a valid email</mat-error>
+        }
+      </mat-form-field>
 
-      <button type="submit">Login</button>
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
 
-      <p *ngIf="error" style="color:red">{{ error }}</p>
+        @if (password?.hasError('required') && password?.touched) {
+          <mat-error>Password is required</mat-error>
+        } @else if (password?.hasError('minlength') && password?.touched) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Error message -->
+      @if (error) {
+        <p class="error-text">{{ error }}</p>
+      }
+
+      <!-- Submit button -->
+      <button
+        mat-raised-button
+        color="primary"
+        class="full-width"
+        type="submit"
+        [disabled]="loading || form.invalid"
+      >
+        @if (!loading) {
+          Login
+        } @else {
+          <mat-spinner diameter="20"></mat-spinner>
+        }
+      </button>
     </form>
+  </mat-card>
+</div>

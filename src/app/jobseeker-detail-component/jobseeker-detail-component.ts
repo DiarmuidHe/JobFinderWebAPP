@@ -109,8 +109,8 @@ onApply(): void {
     coverLetter: null
   };
 
-  console.log("DEBUG: application object", application);
-  console.log("DEBUG: jobSeekerId", jobSeekerId);
+  // console.log("DEBUG: application object", application);
+  // console.log("DEBUG: jobSeekerId", jobSeekerId);
 
   this.jobSeekerService.addApplication(jobSeekerId, application).subscribe({
     next: (res) => {

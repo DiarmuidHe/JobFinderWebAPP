@@ -1,0 +1,42 @@
+.login-page {
+  min-height: calc(100vh - 64px); // account for toolbar
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+}
+
+.login-title {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error-text {
+  color: #f44336;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Extra small tweaks for very small screens */
+@media (max-width: 400px) {
+  .login-card {
+    padding: 16px;
+  }
+}

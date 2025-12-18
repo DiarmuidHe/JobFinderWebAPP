@@ -11,23 +11,37 @@ type LoginResponse = { accessToken: string };
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authUrl = `${environment.apiUri}/auth/register`;
+  private readonly apiUrl = environment.apiUri;
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string, name: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.authUrl, { email, password, name }).pipe(
-      tap((resp) => {
-        localStorage.setItem(STORAGE_KEY_TOKEN, resp.accessToken);
-      })
-    );
+  // LOGIN
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/auth/login`, { email, password })
+      .pipe(
+        tap((resp) => {
+          localStorage.setItem(STORAGE_KEY_TOKEN, resp.accessToken);
+        })
+      );
+  }
+
+  // REGISTER 
+  register(name: string, email: string, password: string): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/auth/register`, { name, email, password })
+      .pipe(
+        tap((resp) => {
+          localStorage.setItem(STORAGE_KEY_TOKEN, resp.accessToken);
+        })
+      );
   }
 
   setCurrentJobSeeker(jobSeeker: JobSeeker): void {
     const data = {
       _id: jobSeeker._id,
       name: jobSeeker.name,
-      email: jobSeeker.email
+      email: jobSeeker.email,
     };
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(data));
   }

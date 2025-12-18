@@ -68,16 +68,16 @@ export class JobseekerListComponent implements OnInit {
   private appliedJobIds = new Set<string>();
 
   ngOnInit(): void {
-    console.log('[JobseekerListComponent] ngOnInit');
+    //console.log('[JobseekerListComponent] ngOnInit');
     this.loadJobs();
   }
 
   private loadJobs(): void {
     const currentId = this.authService.getCurrentJobSeekerId();
-    console.log('[JobseekerListComponent] current jobseeker ID:', currentId);
+    //console.log('[JobseekerListComponent] current jobseeker ID:', currentId);
 
     if (!currentId) {
-      console.log('[JobseekerListComponent] No current jobseeker, loading all jobs with no filter');
+      //console.log('[JobseekerListComponent] No current jobseeker, loading all jobs with no filter');
       this.loadJobsWithoutFilter();
       return;
     }
@@ -104,7 +104,7 @@ export class JobseekerListComponent implements OnInit {
 
   /** Loads jobs from employers and filters out those already applied for */
   private loadJobsWithoutFilter(): void {
-    console.log('[JobseekerListComponent] Loading jobs from employers...');
+    //console.log('[JobseekerListComponent] Loading jobs from employers...');
     this.employerService.getEmployers().subscribe({
       next: (employers: Employer[]) => {
         console.log('[JobseekerListComponent] Employers loaded:', employers);
@@ -114,9 +114,9 @@ export class JobseekerListComponent implements OnInit {
           (employer.jobs || []).forEach(job => {
             const alreadyApplied = this.appliedJobIds.has(job.jobId);
 
-            console.log(
-              `[JobseekerListComponent] Checking job ${job.jobId} (${job.title}) from employer ${employer.companyName} - active=${job.active}, alreadyApplied=${alreadyApplied}`
-            );
+            // console.log(
+            //   `[JobseekerListComponent] Checking job ${job.jobId} (${job.title}) from employer ${employer.companyName} - active=${job.active}, alreadyApplied=${alreadyApplied}`
+            // );
 
             // Only show active jobs the user has NOT applied for
             if (job.active && !alreadyApplied) {

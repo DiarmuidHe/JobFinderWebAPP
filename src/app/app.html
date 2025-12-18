@@ -10,10 +10,17 @@
   <a mat-button routerLink="/employers" routerLinkActive="active-link">
     Employers
   </a>
+
+  <!-- Right side: login / logout -->
+  @if (auth.isLoggedIn()) {
+    <button mat-button (click)="logout()">Logout</button>
+  } @else {
+    <a mat-button routerLink="/login" routerLinkActive="active-link">
+      Login
+    </a>
+  }
 </mat-toolbar>
 
 <main class="app-content">
   <router-outlet />
 </main>
-
-<router-outlet />
