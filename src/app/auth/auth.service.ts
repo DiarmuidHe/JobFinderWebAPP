@@ -96,12 +96,21 @@ export class AuthService {
       .pipe(switchMap(() => this.login(email, password, 'jobseeker')));
   }
 
-  registerEmployer(name: string, email: string, password: string): Observable<void> {
+  registerEmployer(  name: string,
+      email: string,
+      password: string,
+      location?: string,
+      logo?: string,
+      description?: string): Observable<void> {
     return this.http
       .post<RegisterResponse>(`${this.apiUrl}/auth/register/employer`, {
         name,
         email,
         password,
+        location,
+        logo,
+        description,
+
       })
       .pipe(switchMap(() => this.login(email, password, 'employer')));
   }

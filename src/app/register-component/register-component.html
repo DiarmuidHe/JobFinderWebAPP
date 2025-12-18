@@ -5,17 +5,51 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form">
       <!-- Role selection -->
-      <section class="role-section">
-        <label class="section-label">I am a</label>
-        <mat-radio-group class="role-radio-group" formControlName="role">
-          <mat-radio-button value="jobseeker">
-            Jobseeker
-          </mat-radio-button>
-          <mat-radio-button value="employer">
-            Employer
-          </mat-radio-button>
-        </mat-radio-group>
-      </section>
+    <section class="role-section">
+    <label class="section-label">I am a</label>
+    <mat-radio-group class="role-radio-group" formControlName="role">
+        <mat-radio-button value="jobseeker">Jobseeker</mat-radio-button>
+        <mat-radio-button value="employer">Employer</mat-radio-button>
+    </mat-radio-group>
+    </section>
+
+        <!-- Employer-only fields -->
+        @if (roleCtrl?.value === 'employer') {
+
+        <!-- Location -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Company Location</mat-label>
+            <input matInput formControlName="location" placeholder="e.g. Dublin, Ireland" />
+            @if (form.get('location')?.touched && form.get('location')?.hasError('required')) {
+            <mat-error>Location is required for employers.</mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Logo URL -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Logo URL</mat-label>
+            <input matInput formControlName="logo" placeholder="https://example.com/logo.png" />
+            @if (form.get('logo')?.touched) {
+            @if (form.get('logo')?.hasError('pattern')) {
+                <mat-error>
+                Enter a valid image URL starting with http(s) and ending in
+                .png, .jpg, .jpeg, .gif or .svg
+                </mat-error>
+            }
+            }
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Company Description</mat-label>
+            <textarea
+            matInput
+            rows="4"
+            formControlName="description"
+            placeholder="Tell jobseekers a bit about your company..."
+            ></textarea>
+        </mat-form-field>
+        }
 
       <!-- Name -->
       <mat-form-field appearance="outline" class="full-width">

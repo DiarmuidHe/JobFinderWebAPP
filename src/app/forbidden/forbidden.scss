@@ -1,0 +1,17 @@
+.forbidden-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  text-align: center;
+}
+
+mat-card {
+  padding: 30px;
+  max-width: 400px;
+}
+
+.forbidden-icon {
+  font-size: 48px;
+  margin-right: 10px;
+}   

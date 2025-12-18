@@ -45,15 +45,14 @@ export class RegisterComponent {
     {
       role: ['jobseeker' as UserRole, Validators.required],
       name: ['', [Validators.required, Validators.minLength(2)]],
-      email: [
-        '',
-        [Validators.required, Validators.email],
-      ],
-      password: [
-        '',
-        [Validators.required, Validators.minLength(6)],
-      ],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
+
+      // Employer-only fields (can still live in same form)
+      location: [''],
+      logo: [''],
+      description: [''],
     },
     {
       validators: [this.passwordsMatchValidator],
@@ -88,43 +87,61 @@ export class RegisterComponent {
     return this.form.get('confirmPassword');
   }
 
-  onSubmit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.isSubmitting.set(true);
-
-    const { role, name, email, password } = this.form.value as {
-      role: UserRole;
-      name: string;
-      email: string;
-      password: string;
-    };
-
-    const register$ =
-      role === 'jobseeker'
-        ? this.auth.registerJobseeker(name, email, password)
-        : this.auth.registerEmployer(name, email, password);
-
-    register$.subscribe({
-      next: () => {
-        this.isSubmitting.set(false);
-        this.snackBar.open('Registration successful! You are now logged in.', 'Close', {
-          duration: 3000,
-        });
-        this.router.navigate(['/']); // adjust to wherever you want to land after register
-      },
-      error: (err) => {
-        console.error('Registration error', err);
-        this.isSubmitting.set(false);
-        this.snackBar.open(
-          err?.error?.message || 'Registration failed. Please try again.',
-          'Close',
-          { duration: 4000 }
-        );
-      },
-    });
+ onSubmit() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
   }
+
+  this.isSubmitting.set(true);
+
+  const {
+    role,
+    name,
+    email,
+    password,
+    location,
+    logo,
+    description,
+  } = this.form.value as {
+    role: UserRole;
+    name: string;
+    email: string;
+    password: string;
+    location?: string;
+    logo?: string;
+    description?: string;
+  };
+
+  const register$ =
+    role === 'jobseeker'
+      ? this.auth.registerJobseeker(name, email, password)
+      : this.auth.registerEmployer(
+          name,
+          email,
+          password,
+          location,
+          logo,
+          description
+        );
+
+  register$.subscribe({
+    next: () => {
+      this.isSubmitting.set(false);
+      this.snackBar.open('Registration successful! You are now logged in.', 'Close', {
+        duration: 3000,
+      });
+      this.router.navigate(['/']);
+    },
+    error: (err) => {
+      console.error('Registration error', err);
+      this.isSubmitting.set(false);
+      this.snackBar.open(
+        err?.error?.message || 'Registration failed. Please try again.',
+        'Close',
+        { duration: 4000 }
+      );
+    },
+  });
+}
 }

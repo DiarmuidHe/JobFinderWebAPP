@@ -9,28 +9,23 @@ import { RegisterComponent } from './register-component/register-component';
 import { JobseekerDetailComponent } from './jobseeker-detail-component/jobseeker-detail-component';
 import { OauthComponenent } from './OAuth/oauth-componenent/oauth-componenent';
 import { RoleGuard } from './auth/auth-guard';
+import { Forbidden } from './forbidden/forbidden';
 export const routes: Routes = [
     { path: '', component: JobseekerListComponent }, 
     { path: 'employers', component: EmployerList },
     { path: 'employers/new', component: EmployerFormComponent },
-    { path: 'employers/:id', component: EmployerDetailComponent },
+    { 
+        path: 'employers/:id', 
+        component: EmployerDetailComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['employer'] }
+    },
     
     { path: 'jobseekers', component: JobseekerListComponent },
     { path: 'jobseekers/:employerId/:jobId', component: JobseekerDetailComponent },
     { path: 'login', component: LoginComponent },
     { path: 'oauth-callback', component: OauthComponenent },
     { path: 'register', component: RegisterComponent},
-    // {
-    //     path: 'jobseeker/dashboard',
-    //     component: JobseekerDashboardComponent,
-    //     canActivate: [RoleGuard],
-    //     data: { roles: ['jobseeker'] }
-    // },
-    // {
-    //     path: 'employer/dashboard',
-    //     component: EmployerDashboardComponent,
-    //     canActivate: [RoleGuard],
-    //     data: { roles: ['employer'] }
-    // }
+    { path: 'forbidden', component: Forbidden }
 ];
 

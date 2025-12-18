@@ -7,9 +7,15 @@
     Jobs
   </a>
 
-  <a mat-button routerLink="/employers" routerLinkActive="active-link">
-    Employers
-  </a>
+  @if (auth.isLoggedIn() && auth.getCurrentUser()?.role === 'employer') {
+    <a
+      mat-button
+      (click)="onEmployersClick()"
+      routerLinkActive="active-link"
+    >
+      Employers
+    </a>
+  }
 
   <!-- Right side: login / logout -->
   @if (auth.isLoggedIn()) {
