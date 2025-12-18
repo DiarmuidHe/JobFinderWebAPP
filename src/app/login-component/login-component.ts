@@ -79,4 +79,7 @@ export class LoginComponent {
       },
     });
   }
+  onGoogleLogin(): void {
+    this.auth.beginGoogleLogin();
+  }
 }

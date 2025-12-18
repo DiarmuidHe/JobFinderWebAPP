@@ -7,6 +7,7 @@ import { LoginComponent } from './login-component/login-component';
 import { JobseekerListComponent } from './jobseeker-list-component/jobseeker-list-component';
 
 import { JobseekerDetailComponent } from './jobseeker-detail-component/jobseeker-detail-component';
+import { OauthComponenent } from './OAuth/oauth-componenent/oauth-componenent';
 
 export const routes: Routes = [
     { path: '', component: JobseekerListComponent }, 
@@ -17,6 +18,6 @@ export const routes: Routes = [
     { path: 'jobseekers', component: JobseekerListComponent },
     { path: 'jobseekers/:employerId/:jobId', component: JobseekerDetailComponent },
     { path: 'login', component: LoginComponent },
-
+    { path: 'oauth-callback', component: OauthComponenent }
 ];
 
