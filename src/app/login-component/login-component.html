@@ -3,6 +3,7 @@
     <h2 class="login-title">Login</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+
       <!-- Email -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
@@ -24,6 +25,7 @@
           formControlName="password"
           autocomplete="current-password"
         />
+
         <button
           mat-icon-button
           matSuffix
@@ -41,29 +43,41 @@
         }
       </mat-form-field>
 
+      <!-- Role Selector -->
+      <div class="full-width role-section">
+    
+        <mat-radio-group formControlName="role" class="role-options">
+          <mat-radio-button class="role-option" value="jobseeker">Jobseeker</mat-radio-button>
+          <mat-radio-button class="role-option" value="employer">Employer</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
       <!-- Error message -->
       @if (error) {
         <p class="error-text">{{ error }}</p>
       }
 
       <!-- Submit button -->
-      <button
+        <button
         mat-raised-button
         color="primary"
         class="full-width"
         type="submit"
         [disabled]="loading || form.invalid"
-      >
+        >
         @if (!loading) {
-          Login
+            Login
         } @else {
-          <mat-spinner diameter="20"></mat-spinner>
+            <mat-spinner diameter="20"></mat-spinner>
         }
-      </button>
-      <button mat-stroked-button type="button" (click)="onGoogleLogin()">
+        </button>
+
+      <!-- Google -->
+      <button mat-stroked-button type="button" class="full-width" (click)="onGoogleLogin()">
         <mat-icon>login</mat-icon>
         Continue with Google
-     </button>
+      </button>
+
     </form>
   </mat-card>
 </div>

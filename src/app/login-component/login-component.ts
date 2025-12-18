@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatRadioModule } from '@angular/material/radio';
 @Component({
   selector: 'app-login-component',
   standalone: true,
@@ -29,6 +29,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatRadioModule
   ],
   templateUrl: './login-component.html',
   styleUrl: './login-component.scss',
@@ -37,7 +38,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
-  name='TempName';
+  
   hidePassword = true;
   loading = false;
   error = '';
@@ -45,6 +46,7 @@ export class LoginComponent {
   form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
+     role: ['jobseeker', Validators.required],
   });
 
   get email() {
@@ -56,31 +58,32 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-  this.error = '';
+    this.error = '';
 
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const { email, password, role } = this.form.value;
+    if (!email || !password || !role) return;
+
+    this.loading = true;
+
+    this.auth
+      .login(email.trim().toLowerCase(), password, role)   // use chosen role
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.router.navigateByUrl('/');
+        },
+        error: (err) => {
+          this.loading = false;
+          this.error = err?.error?.message ?? 'Login failed. Please try again.';
+        },
+      });
   }
 
-  const { email, password } = this.form.value;
-  if (!email || !password) return;
-
-  this.loading = true;
-
-  this.auth
-    .login(email.trim().toLowerCase(), password, 'jobseeker')
-    .subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigateByUrl('/');
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error = err?.error?.message ?? 'Login failed. Please try again.';
-      },
-    });
-}
 
   onGoogleLogin(): void {
     this.auth.beginGoogleLogin();
