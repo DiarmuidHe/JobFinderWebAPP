@@ -18,6 +18,9 @@ import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { NgStyle } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+
 @Component({
   selector: 'app-employer-detail-component',
   standalone: true,
@@ -43,10 +46,13 @@ import { NgStyle } from '@angular/common';
   styleUrl: './employer-detail-component.scss',
 })
 export class EmployerDetailComponent implements OnInit {
-   private route = inject(ActivatedRoute);
+  
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private employerService = inject(EmployerService);
 
   constructor(
+    private auth: AuthService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
   ) {}
@@ -208,4 +214,22 @@ export class EmployerDetailComponent implements OnInit {
       }
     });
   } 
+
+  onDeleteEmployer(): void {
+    if (!this.employer?._id) return;
+
+    if (!confirm(`Delete employer "${this.employer.companyName}"?`)) return;
+
+    this.employerService.deleteEmployer(this.employer._id).subscribe({
+      next: () => {
+        alert('Employer deleted.');
+        this.auth.logout();
+        this.router.navigate(['']);
+      },
+      error: (err) => {
+        console.error('Failed to delete employer:', err);
+        alert('Delete failed. See console.');
+      }
+    });
+  }
 }
