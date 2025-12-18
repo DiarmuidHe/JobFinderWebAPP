@@ -13,15 +13,16 @@ export class LoginComponent {
   email = '';
   password = '';
   error = '';
-
+  
   constructor(private auth: AuthService, private router: Router) {}
 
   submit() {
     this.error = '';
     const emailClean = this.email.trim().toLowerCase();
     const passwordClean = this.password; // don't trim passwords unless you want to allow it
+    const name = emailClean.split('@')[0];
 
-    this.auth.login(emailClean, passwordClean).subscribe({
+    this.auth.login(emailClean, passwordClean, name).subscribe({
       next: () => this.router.navigateByUrl('/'),
       error: (err) => {
         this.error = err?.error?.message ?? 'Login failed';
