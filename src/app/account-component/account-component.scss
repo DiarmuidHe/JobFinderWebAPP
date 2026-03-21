@@ -1,0 +1,116 @@
+.account-page {
+  min-height: calc(100vh - 64px);
+  padding: 2rem 1rem 3rem;
+}
+
+.account-card {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 2rem;
+  background: #eef2ff;
+}
+
+.tab-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #6979d8;
+}
+
+.tab-button {
+  border: 0;
+  background: transparent;
+  color: #eef2ff;
+  padding: 1rem;
+  font-size: 1.15rem;
+  cursor: pointer;
+  border-right: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.tab-button:last-child {
+  border-right: 0;
+}
+
+.tab-button.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.state-block,
+.details-pane,
+.other-pane {
+  min-height: 480px;
+  padding: 2.25rem;
+}
+
+.state-block {
+  display: grid;
+  place-items: center;
+}
+
+.pane-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.pane-header p {
+  margin: 0.5rem 0 2rem;
+  color: #506070;
+}
+
+.details-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.other-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.info-card,
+.empty-state {
+  border: 3px solid #171717;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1.35rem 1.5rem;
+}
+
+.info-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+}
+
+.info-card p,
+.empty-state p {
+  margin: 0.35rem 0;
+}
+
+@media (max-width: 700px) {
+  .account-page {
+    padding: 1rem 0.5rem 2rem;
+  }
+
+  .state-block,
+  .details-pane,
+  .other-pane {
+    padding: 1.25rem;
+    min-height: auto;
+  }
+
+  .pane-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+}

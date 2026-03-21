@@ -146,6 +146,22 @@ export class AuthService {
     this.clearAuth();
   }
 
+  updateCurrentUserProfile(name: string, email: string): void {
+    const currentUser = this.currentUser$.value;
+    if (!currentUser) {
+      return;
+    }
+
+    const updatedUser = {
+      ...currentUser,
+      name,
+      email,
+    };
+
+    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(updatedUser));
+    this.currentUser$.next(updatedUser);
+  }
+
   // INTERNAL HELPERS
   private setSessionFromToken(token: string): void {
     const payload = this.safeDecodeToken(token);

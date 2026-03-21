@@ -1,0 +1,170 @@
+<section class="account-page">
+  <mat-card class="account-card">
+    <div class="tab-strip">
+      <button
+        type="button"
+        class="tab-button"
+        [class.active]="activeTab() === 'details'"
+        (click)="setTab('details')">
+        Details
+      </button>
+      <button
+        type="button"
+        class="tab-button"
+        [class.active]="activeTab() === 'other'"
+        (click)="setTab('other')">
+        Other
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="state-block">
+        <mat-spinner diameter="42"></mat-spinner>
+      </div>
+    } @else if (error()) {
+      <div class="state-block">
+        <p>{{ error() }}</p>
+      </div>
+    } @else if (details(); as accountDetails) {
+      @if (activeTab() === 'details') {
+        <div class="details-pane">
+          <div class="pane-header">
+            <div>
+              <h1>{{ title() }}</h1>
+              <p>Update your profile information here.</p>
+            </div>
+          </div>
+
+          <form class="details-form" [formGroup]="form" (ngSubmit)="saveDetails()">
+            @if (accountDetails.role === 'jobseeker') {
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Skills</mat-label>
+                <textarea
+                  matInput
+                  rows="4"
+                  formControlName="skills"
+                  placeholder="Separate skills with commas"></textarea>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline">
+                <mat-label>Company Name</mat-label>
+                <input matInput formControlName="companyName" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Contact Email</mat-label>
+                <input matInput formControlName="contactEmail" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Location</mat-label>
+                <input matInput formControlName="location" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput rows="4" formControlName="description"></textarea>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Logo URL</mat-label>
+                <input matInput formControlName="logo" />
+              </mat-form-field>
+            }
+
+            <mat-form-field appearance="outline">
+              <mat-label>New Password</mat-label>
+              <input matInput type="password" formControlName="password" placeholder="Leave blank to keep current password" />
+            </mat-form-field>
+
+            <div class="form-actions">
+              @if (!editMode()) {
+                <button type="button" mat-flat-button color="primary" (click)="enableEdit()">
+                  Edit
+                </button>
+              } @else {
+                <button type="button" mat-stroked-button (click)="cancelEdit()">
+                  Cancel
+                </button>
+                <button type="submit" mat-flat-button color="primary" [disabled]="saving()">
+                  {{ saving() ? 'Saving...' : 'Save Changes' }}
+                </button>
+              }
+            </div>
+          </form>
+        </div>
+      } @else {
+        <div class="other-pane">
+          <div class="pane-header">
+            <div>
+              <h1>{{ otherHeading() }}</h1>
+              <p>
+                @if (accountDetails.role === 'employer') {
+                  Review who applied and which job they applied for.
+                } @else {
+                  Track the jobs you have applied for.
+                }
+              </p>
+            </div>
+          </div>
+
+          @if (otherItems().length === 0) {
+            <div class="empty-state">
+              <p>
+                @if (accountDetails.role === 'employer') {
+                  No applicants yet.
+                } @else {
+                  You have not applied for any jobs yet.
+                }
+              </p>
+            </div>
+          } @else {
+            <div class="other-list">
+              @if (accountDetails.role === 'employer') {
+                @for (item of otherItems(); track $index) {
+                  <article class="info-card">
+                    <h2>{{ getApplicantName($any(item)) }}</h2>
+                    <p><strong>Email:</strong> {{ getApplicantEmail($any(item)) }}</p>
+                    <p><strong>Job:</strong> {{ getApplicantJobTitle($any(item)) }}</p>
+                    @if ($any(item).status) {
+                      <p><strong>Status:</strong> {{ $any(item).status }}</p>
+                    }
+                    @if ($any(item).appliedAt) {
+                      <p><strong>Applied:</strong> {{ $any(item).appliedAt | date: 'medium' }}</p>
+                    }
+                  </article>
+                }
+              } @else {
+                @for (item of otherItems(); track $index) {
+                  <article class="info-card">
+                    <h2>{{ getAppliedJobTitle($any(item)) }}</h2>
+                    <p><strong>Employer:</strong> {{ getAppliedEmployerName($any(item)) }}</p>
+                    @if ($any(item).status) {
+                      <p><strong>Status:</strong> {{ $any(item).status }}</p>
+                    }
+                    @if ($any(item).location) {
+                      <p><strong>Location:</strong> {{ $any(item).location }}</p>
+                    }
+                    @if ($any(item).appliedAt) {
+                      <p><strong>Applied:</strong> {{ $any(item).appliedAt | date: 'medium' }}</p>
+                    }
+                  </article>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </mat-card>
+</section>

@@ -35,8 +35,21 @@ export class App {
       this.router.navigate(['/employers']);
     }
   }
-    logout(): void {
-      this.auth.logout();
-      this.router.navigate(['/login']);
+
+  goToAccount(): void {
+    if (!this.auth.isLoggedIn()) {
+      return;
     }
+
+    this.router.navigate(['/account']);
+  }
+
+  isAccountRoute(): boolean {
+    return this.router.url.startsWith('/account');
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
 }
