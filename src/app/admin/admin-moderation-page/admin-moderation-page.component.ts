@@ -7,7 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { finalize } from 'rxjs';
+import { finalize, switchMap } from 'rxjs';
 import { AdminService } from '../admin.service';
 import {
   AdminAccountDetails,
@@ -17,6 +17,7 @@ import {
 } from '../admin.models';
 import { DeleteAccountConfirmationDialogComponent } from '../delete-account-confirmation-dialog/delete-account-confirmation-dialog.component';
 import { SuspensionReasonDialogComponent } from '../suspension-reason-dialog/suspension-reason-dialog.component';
+import { SuspensionEmailService } from '../suspension-email.service';
 
 type SummaryMap = Record<AdminEntityType, AdminAccountSummary[]>;
 type BoolMap = Record<AdminEntityType, boolean>;
@@ -46,6 +47,7 @@ export class AdminModerationPageComponent implements OnInit {
   private readonly adminService = inject(AdminService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
+  private readonly suspensionEmailService = inject(SuspensionEmailService);
 
   readonly activeTab = signal<AdminEntityType>('jobseekers');
   readonly searchTerm = signal('');
@@ -266,12 +268,27 @@ export class AdminModerationPageComponent implements OnInit {
 
       this.adminService
         .suspendAccount(account.entityType, account.id, reason)
-        .pipe(finalize(() => this.clearBusyState()))
+        .pipe(
+          switchMap(() =>
+            this.suspensionEmailService.sendSuspensionEmail({
+              email: account.email,
+              name: account.displayName,
+              reason,
+            })
+          ),
+          finalize(() => this.clearBusyState())
+        )
         .subscribe({
-          next: () => {
-            this.snackBar.open(`${account.displayName} has been suspended.`, 'Close', {
-              duration: 3000,
-            });
+          next: (emailSent) => {
+            this.snackBar.open(
+              emailSent
+                ? `${account.displayName} has been suspended and notified by email.`
+                : `${account.displayName} has been suspended. Email notification was not sent.`,
+              'Close',
+              {
+                duration: 4000,
+              }
+            );
             this.reloadEntity(account.entityType, account.id);
           },
           error: (err) => {
