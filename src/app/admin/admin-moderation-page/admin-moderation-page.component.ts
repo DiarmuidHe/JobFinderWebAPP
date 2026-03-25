@@ -272,7 +272,6 @@ export class AdminModerationPageComponent implements OnInit {
           switchMap(() =>
             this.suspensionEmailService.sendSuspensionEmail({
               email: account.email,
-              name: account.displayName,
               reason,
             })
           ),

@@ -5,7 +5,6 @@ import { environment } from '../../environments/environment.development';
 
 export interface SuspensionEmailPayload {
   email: string;
-  name: string;
   reason: string;
 }
 
@@ -16,10 +15,9 @@ export class SuspensionEmailService {
 
   sendSuspensionEmail(payload: SuspensionEmailPayload): Observable<boolean> {
     const email = payload.email.trim();
-    const name = payload.name.trim();
     const reason = payload.reason.trim();
 
-    if (!email || !name || !reason || !this.isConfigured()) {
+    if (!email || !reason || !this.isConfigured()) {
       return of(false);
     }
 
@@ -32,7 +30,6 @@ export class SuspensionEmailService {
           user_id: environment.emailjs.publicKey,
           template_params: {
             email,
-            name,
             reason,
           },
         },

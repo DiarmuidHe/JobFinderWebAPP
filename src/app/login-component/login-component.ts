@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -41,9 +41,9 @@ export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
   
-  hidePassword = true;
-  loading = false;
-  error = '';
+  readonly hidePassword = signal(true);
+  readonly loading = signal(false);
+  readonly error = signal('');
 
   form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -60,7 +60,7 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    this.error = '';
+    this.error.set('');
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -70,18 +70,18 @@ export class LoginComponent {
     const { email, password, role } = this.form.value;
     if (!email || !password || !role) return;
 
-    this.loading = true;
+    this.loading.set(true);
 
     this.auth
       .login(email.trim().toLowerCase(), password, role)   // use chosen role
       .subscribe({
         next: () => {
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigateByUrl(role === 'admin' ? '/admin' : '/');
         },
         error: (err) => {
-          this.loading = false;
-          this.error = err?.error?.message ?? 'Login failed. Please try again.';
+          this.loading.set(false);
+          this.error.set(err?.error?.message ?? 'Login failed. Please try again.');
         },
       });
   }

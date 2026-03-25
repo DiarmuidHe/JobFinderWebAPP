@@ -21,7 +21,7 @@
         <mat-label>Password</mat-label>
         <input
           matInput
-          [type]="hidePassword ? 'password' : 'text'"
+          [type]="hidePassword() ? 'password' : 'text'"
           formControlName="password"
           autocomplete="current-password"
         />
@@ -30,10 +30,10 @@
           mat-icon-button
           matSuffix
           type="button"
-          (click)="hidePassword = !hidePassword"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          (click)="hidePassword.set(!hidePassword())"
+          [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
         >
-          <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
         </button>
 
         @if (password?.hasError('required') && password?.touched) {
@@ -54,8 +54,8 @@
       </div>
 
       <!-- Error message -->
-      @if (error) {
-        <p class="error-text">{{ error }}</p>
+      @if (error()) {
+        <p class="error-text">{{ error() }}</p>
       }
 
       <!-- Submit button -->
@@ -64,9 +64,9 @@
         color="primary"
         class="full-width"
         type="submit"
-        [disabled]="loading || form.invalid"
+        [disabled]="loading() || form.invalid"
         >
-        @if (!loading) {
+        @if (!loading()) {
             Login
         } @else {
             <mat-spinner diameter="20"></mat-spinner>
