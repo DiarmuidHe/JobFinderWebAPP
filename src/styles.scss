@@ -26,9 +26,13 @@ body {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  background: linear-gradient(135deg, #f5f7fb, #e4ebff);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
+  min-height: 100vh;
 
   // Reset the user agent margin.
   margin: 0;

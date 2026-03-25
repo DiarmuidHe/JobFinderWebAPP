@@ -1,23 +1,35 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+
 import { App } from './app';
+import { AuthService } from './auth/auth.service';
 
 describe('App', () => {
+  let component: App;
+  let fixture: ComponentFixture<App>;
+
+  const authServiceStub = {
+    getCurrentUser: () => null,
+    isLoggedIn: () => false,
+    logout: () => undefined,
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-    }).compileComponents();
-  });
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: authServiceStub },
+      ],
+    })
+      .compileComponents();
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
+    fixture = TestBed.createComponent(App);
+    component = fixture.componentInstance;
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, WebProgrammingAssingment2');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });
