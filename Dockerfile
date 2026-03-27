@@ -1,0 +1,15 @@
+FROM node:22.17.1-alpine AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM nginx:1.29-alpine
+
+EXPOSE 80
+
+COPY --from=build /app/dist/WebProgrammingAssingment2/browser /usr/share/nginx/html

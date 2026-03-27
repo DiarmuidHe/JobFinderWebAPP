@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {  Observable } from 'rxjs';
 import { JobSeeker } from './jobseeker.interface';
 import { Application } from '../aplications/application.interface';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({

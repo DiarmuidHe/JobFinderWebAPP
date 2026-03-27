@@ -1,5 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -9,11 +9,11 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthCustomService);
 
-  const apiUri = environment.apiUri;
-  const jwt = localStorage.getItem('accessToken');
+  const authApiUris = environment.authApiUris;
+  const jwt = authService.getToken();
 
   const authRequest =
-    req.url.startsWith(apiUri) && jwt
+    authApiUris.some((apiUri) => req.url.startsWith(apiUri)) && jwt
       ? req.clone({
           setHeaders: { Authorization: `Bearer ${jwt}` },
         })
